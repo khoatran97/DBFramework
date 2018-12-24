@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ClassLibrary
+namespace DBFramework
 {
     public class Context
     {
@@ -28,14 +28,6 @@ namespace ClassLibrary
         public int instance
         {
             get => default(int);
-            set
-            {
-            }
-        }
-
-        public DBSyntax dbSyntax
-        {
-            get => default(DBSyntax);
             set
             {
             }

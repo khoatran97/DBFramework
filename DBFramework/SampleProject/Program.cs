@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DBFramework;
 
 namespace SampleProject
 {
@@ -10,6 +6,9 @@ namespace SampleProject
     {
         static void Main(string[] args)
         {
+            Connector connector = new Connector("DESKTOP-735FCOO\\SQLEXPRESS", "Library", true);
+            Entity.setConnector(connector);
+            object book = Entity.instance.Books;
         }
     }
 }
