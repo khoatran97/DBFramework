@@ -1,12 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Data.SqlClient;
+using System.Reflection;
 
 namespace DBFramework
 {
-    public class Context
+    public class Context <T> where T : new()
     {
-        private Context(Connector connector)
+        private Connector connector;
+
+        public Context()
         {
-            throw new System.NotImplementedException();
+        }
+
+        public Context(Connector connector)
+        {
+            this.connector = connector;
         }
 
         private Entity entity
@@ -15,15 +27,7 @@ namespace DBFramework
             set
             {
             }
-        }
-
-        private Connector connector
-        {
-            get => default(Connector);
-            set
-            {
-            }
-        }
+        }       
 
         public int instance
         {
@@ -35,7 +39,21 @@ namespace DBFramework
 
         public bool add()
         {
-            throw new System.NotImplementedException();
+            string query = "INSERT INTO Books(name) VALUES('test3')";
+            Console.WriteLine(typeof(T).FullName);
+            PropertyInfo[] properties = typeof(T).GetProperties();
+
+            //foreach(PropertyInfo p in properties)
+            //{
+            //    query = query 
+            //}
+
+            SqlCommand command = new SqlCommand(query, connector.connection);
+            connector.connection.Open();
+
+            command.ExecuteNonQuery();
+            
+            return true;
         }
 
         public bool update()
@@ -48,9 +66,37 @@ namespace DBFramework
             throw new System.NotImplementedException();
         }
 
-        public List<object> getAll()
+        public List<T> getAll(object _object)
         {
-            throw new System.NotImplementedException();
+            List<T> items = new List<T>();
+
+            string query = "SELECT * FROM Books";
+
+            SqlCommand command = new SqlCommand(query, connector.connection);
+            connector.connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+           
+            try
+            {
+                Collection<Object> entityList = new Collection<Object>();
+                entityList.Add(new T());
+
+                ArrayList records = EntityDataMappingHelper.SelectRecords(entityList, reader);
+
+                for (int i = 0; i < records.Count; i++)
+                {
+                    T report = new T();
+                    Dictionary<string, object> currentRecord = (Dictionary<string, object>)records[i];
+                    EntityDataMappingHelper.FillEntityFromRecord(report, currentRecord);
+                    items.Add(report);
+                }
+            }
+            finally
+            {
+                reader.Close();
+            }
+
+            return items;
         }
 
         public void getInstance()

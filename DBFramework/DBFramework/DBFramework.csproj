@@ -40,10 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Books.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="Connector.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="EntityDataMappingHelper.cs" />
     <Compile Include="EntityProperty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
