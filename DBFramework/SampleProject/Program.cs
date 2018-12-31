@@ -12,12 +12,19 @@ namespace SampleProject
         {
             Connector connector = new Connector("DESKTOP-Q1IUNEN\\XUANNAM", "Library", false, "sa", "123456");
             Entity.setConnector(connector);
-            object book = Entity.instance.Books;
 
             Context<Books> context = new Context<Books>(connector);
 
-            List<Books> books = context.getAll(book);
-            //context.add();
+            Books book = new Books();
+            book.name = "test 10";
+
+            //List<Books> books = context.getAll();
+            context.add(book);
+            //context.delete(2);
+
+            //Books book = context.findById(1);
+
+            //System.Console.WriteLine(book.id + " " + book.name);
         }
     }
 }

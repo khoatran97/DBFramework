@@ -37,39 +37,75 @@ namespace DBFramework
             }
         }
 
-        public bool add()
+        public bool add(T entity)            
         {
-            string query = "INSERT INTO Books(name) VALUES('test3')";
-            Console.WriteLine(typeof(T).FullName);
-            PropertyInfo[] properties = typeof(T).GetProperties();
+            Type t = entity.GetType();
+            List<object> values = new List<object>();
+            string query = "INSERT INTO";
 
-            //foreach(PropertyInfo p in properties)
-            //{
-            //    query = query 
-            //}
+            // CREATE QUERY
+            query = query + " " + typeof(T).FullName.Split('.')[1] + "(";
+            PropertyInfo[] properties = typeof(T).GetProperties();       
+            for(int i = 1; i < properties.Length; i++)
+            {
+                query += properties[i].Name + ",";
+                PropertyInfo prop = t.GetProperty(properties[i].Name);
+                values.Add(prop.GetValue(entity));
+            }
+            query = query.Substring(0, query.Length - 1);
+            query += ") VALUES(@name);";
 
+            //EXECUTE QUERY
             SqlCommand command = new SqlCommand(query, connector.connection);
+
+            //ADD PARAMS
+            foreach(object value in values)
+            {
+                command.Parameters.AddWithValue("@name", value);
+            }  
+            
             connector.connection.Open();
 
-            command.ExecuteNonQuery();
+            int result = command.ExecuteNonQuery();
             
             return true;
         }
 
-        public bool update()
+        public bool update(T entity)
         {
-            throw new System.NotImplementedException();
+
+            return true;
+        }        
+
+        public bool delete(int id)
+        {
+            //Check exist
+            if (findById(id) != null)
+            {
+                string query = "DELETE i";
+
+                // CREATE QUERY
+                query = query + " " + "FROM " + typeof(T).FullName.Split('.')[1] + " i WHERE i.id = @id";
+
+                //EXECUTE QUERY
+                SqlCommand command = new SqlCommand(query, connector.connection);
+
+                //ADD PARAMS
+                command.Parameters.AddWithValue("@id", id);
+
+                connector.connection.Open();
+
+                command.ExecuteNonQuery();
+
+                return true;
+            }
+
+            return false;
         }
 
-        public bool delete()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public List<T> getAll(object _object)
+        public List<T> getAll()
         {
             List<T> items = new List<T>();
-
             string query = "SELECT * FROM Books";
 
             SqlCommand command = new SqlCommand(query, connector.connection);
@@ -85,10 +121,10 @@ namespace DBFramework
 
                 for (int i = 0; i < records.Count; i++)
                 {
-                    T report = new T();
+                    T book = new T();
                     Dictionary<string, object> currentRecord = (Dictionary<string, object>)records[i];
-                    EntityDataMappingHelper.FillEntityFromRecord(report, currentRecord);
-                    items.Add(report);
+                    EntityDataMappingHelper.FillEntityFromRecord(book, currentRecord);
+                    items.Add(book);
                 }
             }
             finally
@@ -97,6 +133,47 @@ namespace DBFramework
             }
 
             return items;
+        }
+
+        public T findById(int id)
+        {
+            List<T> items = new List<T>();
+            string query = "SELECT *";            
+
+            // CREATE QUERY
+            query = query + " " + "FROM " + typeof(T).FullName.Split('.')[1] + " i WHERE i.id = @id";
+
+            //EXECUTE QUERY
+            SqlCommand command = new SqlCommand(query, connector.connection);
+
+            //ADD PARAMS
+            command.Parameters.AddWithValue("@id", id);
+
+            connector.connection.Open();
+
+            SqlDataReader reader = command.ExecuteReader();
+
+            try
+            {
+                Collection<Object> entityList = new Collection<Object>();
+                entityList.Add(new T());
+
+                ArrayList records = EntityDataMappingHelper.SelectRecords(entityList, reader);
+
+                for (int i = 0; i < records.Count; i++)
+                {
+                    T book = new T();
+                    Dictionary<string, object> currentRecord = (Dictionary<string, object>)records[i];
+                    EntityDataMappingHelper.FillEntityFromRecord(book, currentRecord);
+                    items.Add(book);
+                }
+            }
+            finally
+            {
+                reader.Close();
+            }
+
+            return items.Capacity > 0 ? items[0] : default(T);
         }
 
         public void getInstance()

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBFramework
+namespace SampleProject
 {
-    public class Books
+    class Books
     {
         private int _id;
         public int id
@@ -21,7 +21,7 @@ namespace DBFramework
             set { _name = value; }
         }
 
-        public Books (int id, string name)
+        public Books(int id, string name)
         {
         }
         public Books() { }
