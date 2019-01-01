@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="https://www.c-sharpcorner.com/UploadFile/87b416/dynamically-create-a-class-at-runtime/">
+    <Position X="4.39" Y="0.5" Height="0.99" Width="1.389" />
+  </Comment>
+  <Comment CommentText="https://docs.microsoft.com/en-us/dotnet/api/system.dynamic.dynamicobject.trygetmember?view=netframework-4.7.2">
+    <Position X="1.455" Y="3.198" Height="1.145" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Info of a field in DB (name, type) to use in TypeBuilder">
+    <Position X="1.551" Y="0.5" Height="0.75" Width="1.556" />
+  </Comment>
+  <Comment CommentText="The bridge between Program and DB">
+    <Position X="5.594" Y="5.352" Height="0.75" Width="1.305" />
+  </Comment>
+  <Comment CommentText="get Object (base on DB tables) (for user)">
+    <Position X="1.893" Y="4.57" Height="0.558" Width="1.484" />
+  </Comment>
+  <Class Name="DBFramework.EntityProperty">
+    <Position X="0.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>EntityProperty.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBFramework.Builder">
+    <Position X="3.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAIABAAQAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Builder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBFramework.Entity">
+    <Position X="0.5" Y="4" Width="1.5" />
+    <AssociationLine Name="connector" Type="DBFramework.Connector" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2" Y="4.648" />
+        <Point X="5.406" Y="4.648" />
+        <Point X="5.406" Y="3.1" />
+        <Point X="6.75" Y="3.1" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAABAACQAAACABAAAABEAgAAAAAAAA=</HashCode>
+      <FileName>Entity.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="connector" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="DBFramework.Connector">
+    <Position X="6.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAIBAAEAAAAAAAAIAAAAAgAABAA=</HashCode>
+      <FileName>Connector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBFramework.Context&lt;T&gt;">
+    <Position X="5" Y="6.75" Width="1.5" />
+    <AssociationLine Name="connector" Type="DBFramework.Connector" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.5" Y="6.75" />
+        <Point X="6.5" Y="3.534" />
+        <Point X="6.75" Y="3.534" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQEAAAAAAAAAEAAAAAIGAAA=</HashCode>
+      <FileName>Context.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="connector" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="DBFramework.EntityDataMappingHelper">
+    <Position X="8.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EntityDataMappingHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBFramework.DBContext">
+    <Position X="2.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAQAAAAAAABAACAAAACABAAAABAAAAAgAAAAA=</HashCode>
+      <FileName>DBContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
