@@ -12,61 +12,46 @@ namespace DBFramework
     {
         private Connector connector;
 
-        public Context()
-        {
-        }
-
         public Context(Connector connector)
         {
             this.connector = connector;
         }
 
-        private Entity entity
-        {
-            get => default(Entity);
-            set
-            {
-            }
-        }       
-
-        public int instance
-        {
-            get => default(int);
-            set
-            {
-            }
-        }
-
         public bool add(T entity)            
         {
-            Type t = entity.GetType();
+            Type t = typeof(T);
             List<object> values = new List<object>();
             string query = "INSERT INTO";
+            string param = "";
 
             // CREATE QUERY
-            query = query + " " + typeof(T).FullName.Split('.')[1] + "(";
-            PropertyInfo[] properties = typeof(T).GetProperties();       
+            query = query + " " + t.FullName + "(";
+            PropertyInfo[] properties = t.GetProperties();       
             for(int i = 1; i < properties.Length; i++)
             {
                 query += properties[i].Name + ",";
                 PropertyInfo prop = t.GetProperty(properties[i].Name);
                 values.Add(prop.GetValue(entity));
+                param += param == "" ? "@name" + i : ",@name" + i;
             }
             query = query.Substring(0, query.Length - 1);
-            query += ") VALUES(@name);";
+            query += ") VALUES(" + param + ");";
 
             //EXECUTE QUERY
             SqlCommand command = new SqlCommand(query, connector.connection);
 
             //ADD PARAMS
+            int j = 1;
             foreach(object value in values)
             {
-                command.Parameters.AddWithValue("@name", value);
+                command.Parameters.AddWithValue("@name" + (j++), value);
             }  
             
             connector.connection.Open();
 
             int result = command.ExecuteNonQuery();
+
+            connector.connection.Close();
             
             return true;
         }
@@ -105,8 +90,9 @@ namespace DBFramework
 
         public List<T> getAll()
         {
+            Type t = typeof(T);
             List<T> items = new List<T>();
-            string query = "SELECT * FROM Books";
+            string query = "SELECT * FROM " + t.FullName;
 
             SqlCommand command = new SqlCommand(query, connector.connection);
             connector.connection.Open();
@@ -130,6 +116,7 @@ namespace DBFramework
             finally
             {
                 reader.Close();
+                connector.connection.Close();
             }
 
             return items;
@@ -174,11 +161,6 @@ namespace DBFramework
             }
 
             return items.Capacity > 0 ? items[0] : default(T);
-        }
-
-        public void getInstance()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

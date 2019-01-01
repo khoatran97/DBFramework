@@ -43,6 +43,7 @@
     <Compile Include="Builder.cs" />
     <Compile Include="Connector.cs" />
     <Compile Include="Context.cs" />
+    <Compile Include="DBContext.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="EntityDataMappingHelper.cs" />
     <Compile Include="EntityProperty.cs" />

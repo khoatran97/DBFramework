@@ -1,8 +1,4 @@
 ﻿using DBFramework;
-using System.Data.SqlClient;
-using System.Data;
-using System.Reflection;
-using System.Collections.Generic;
 
 namespace SampleProject
 {
@@ -10,21 +6,20 @@ namespace SampleProject
     {
         static void Main(string[] args)
         {
-            Connector connector = new Connector("DESKTOP-Q1IUNEN\\XUANNAM", "Library", false, "sa", "123456");
-            Entity.setConnector(connector);
+            // Create new connector to connect with DB (Required)
+            Connector connector = new Connector("DESKTOP-735FCOO\\SQLEXPRESS", "Library", true);
+            DBContext.setConnector(connector);
 
-            Context<Books> context = new Context<Books>(connector);
-
-            Books book = new Books();
-            book.name = "test 10";
-
-            //List<Books> books = context.getAll();
-            context.add(book);
-            //context.delete(2);
-
-            //Books book = context.findById(1);
-
-            //System.Console.WriteLine(book.id + " " + book.name);
+            // Create new object
+            dynamic book = Entity.instance.Books;
+            book.Ten = "test test";
+            book.TacGia = "Khoa Tran";
+            book.NhaXuatBan = "Khoa Tran";
+            book.NamXuatBan = 2018;
+            
+            // Use DBContext to do actions with DB
+            DBContext.instance.Books.add(book);
+            var books = DBContext.instance.Books.getAll();
         }
     }
 }

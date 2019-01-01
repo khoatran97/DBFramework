@@ -7,10 +7,17 @@ using System.Linq;
 
 namespace DBFramework
 {
-    public class Entity: DynamicObject
+    public class Entity : DynamicObject
     {
         static private dynamic _instance = null;
-        static private Connector _connector = null;
+
+        private static Connector _connector = null;
+
+        private Dictionary<string, List<EntityProperty>> listEntityProperties;
+
+        private Connector connector;
+
+        private Dictionary<string, Type> listType;
 
         static public dynamic instance
         {
@@ -24,24 +31,32 @@ namespace DBFramework
             }
         }
 
-        static public void setConnector(Connector connector)
+        public static void setConnector(Connector connector)
         {
+
+            if (connector.Equals(_connector))
+            {
+                return;
+            }
+
             _connector = connector;
+
+            DBContext.setConnector(connector);
+            DBContext.getInfoFromEntity();
         }
 
         private Entity(Connector connector)
         {
-            this.connector = connector;
             listEntityProperties = new Dictionary<string, List<EntityProperty>>();
             listType = new Dictionary<string, Type>();
 
             try
             {
                 // Get list table and its properties
-                this.connector.connection.Open();
+                _connector.connection.Open();
 
                 string queryStr = "SELECT * FROM SYS.Tables Order By Name";
-                SqlDataAdapter dataAdapter = new SqlDataAdapter(queryStr, this.connector.connection);
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(queryStr, _connector.connection);
 
                 DataSet dataSet = new DataSet();
                 dataAdapter.Fill(dataSet);
@@ -54,7 +69,7 @@ namespace DBFramework
 
                     queryStr = "SELECT * FROM " + table;
                     DataTable dataTable = new DataTable();
-                    dataAdapter = new SqlDataAdapter(queryStr, this.connector.connection);
+                    dataAdapter = new SqlDataAdapter(queryStr, _connector.connection);
                     dataAdapter.Fill(dataTable);
 
                     foreach (DataColumn column in dataTable.Columns)
@@ -73,19 +88,13 @@ namespace DBFramework
                     this.listType.Add(key, classObject.GetType());
                 }
 
-                this.connector.connection.Close();
+                _connector.connection.Close();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
         }
-
-        private Dictionary<string, List<EntityProperty>> listEntityProperties;
-
-        private Connector connector;
-
-        private Dictionary<string, Type> listType;
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
@@ -102,6 +111,11 @@ namespace DBFramework
                 result = null;
                 return false;
             }
+        }
+
+        public Dictionary<string, Type> getListType()
+        {
+            return this.listType;
         }
     }
 }

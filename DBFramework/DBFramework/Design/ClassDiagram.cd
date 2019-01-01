@@ -33,14 +33,14 @@
     <Position X="0.5" Y="4" Width="1.5" />
     <AssociationLine Name="connector" Type="DBFramework.Connector" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="2" Y="4.61" />
-        <Point X="5.406" Y="4.61" />
+        <Point X="2" Y="4.648" />
+        <Point X="5.406" Y="4.648" />
         <Point X="5.406" Y="3.1" />
         <Point X="6.75" Y="3.1" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAAABAACAAAACABAAAABEAgAAAAAAAA=</HashCode>
+      <HashCode>AAAEAAAAAAAAAAAABAACQAAACABAAAABEAgAAAAAAAA=</HashCode>
       <FileName>Entity.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -54,23 +54,36 @@
       <FileName>Connector.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DBFramework.Context">
-    <Position X="4.5" Y="5" Width="1.5" />
+  <Class Name="DBFramework.Context&lt;T&gt;">
+    <Position X="5" Y="6.75" Width="1.5" />
     <AssociationLine Name="connector" Type="DBFramework.Connector" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="6" Y="5" />
-        <Point X="6" Y="3.534" />
+        <Point X="6.5" Y="6.75" />
+        <Point X="6.5" Y="3.534" />
         <Point X="6.75" Y="3.534" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAABAAAAAAAAAAAAAAAQAAAABAAAQAEAAAAAIGAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQEAAAAAAAAAEAAAAAIGAAA=</HashCode>
       <FileName>Context.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="entity" />
-      <Property Name="connector" />
+      <Field Name="connector" />
     </ShowAsAssociation>
+  </Class>
+  <Class Name="DBFramework.EntityDataMappingHelper">
+    <Position X="8.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EntityDataMappingHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBFramework.DBContext">
+    <Position X="2.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAQAAAAAAABAACAAAACABAAAABAAAAAgAAAAA=</HashCode>
+      <FileName>DBContext.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
