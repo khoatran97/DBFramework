@@ -56,8 +56,25 @@ namespace DBFramework
             return true;
         }
 
-        public bool update(T entity)
+        public bool update(T entity, string prop, string newValue, int id)
         {
+            Type t = typeof(T);
+            List<object> values = new List<object>();
+            string query = "UPDATE";
+            string param = "";
+
+            // CREATE QUERY
+            query = query + " " + t.FullName + " SET " + prop + " = " + newValue + " WHERE id = @id";
+
+            //EXECUTE QUERY
+            SqlCommand command = new SqlCommand(query, connector.connection);
+
+            //ADD PARAMS
+            command.Parameters.AddWithValue("@id", id);
+
+            connector.connection.Open();
+
+            command.ExecuteNonQuery();
 
             return true;
         }        

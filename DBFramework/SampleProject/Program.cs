@@ -20,6 +20,10 @@ namespace SampleProject
             // Use DBContext to do actions with DB
             DBContext.instance.Books.add(book);
             var books = DBContext.instance.Books.getAll();
+
+            //update
+            //DBContext.instance.Books.update(book, "Ten", "My", 1);
+            //var books = DBContext.instance.Books.getAll();
         }
     }
 }
