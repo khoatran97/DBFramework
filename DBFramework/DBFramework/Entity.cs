@@ -117,5 +117,19 @@ namespace DBFramework
         {
             return this.listType;
         }
+
+        public Type getTypeByName(string name)
+        {
+            if (listType.ContainsKey(name))
+            {
+                Type type = listType[name];
+
+                return type;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

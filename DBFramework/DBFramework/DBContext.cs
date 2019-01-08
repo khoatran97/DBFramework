@@ -64,6 +64,11 @@ namespace DBFramework
             Entity.setConnector(connector);
         }
 
+        public Dictionary<string, dynamic> getListTable()
+        {
+            return listContext;
+        }
+
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
             if (listContext.ContainsKey(binder.Name))
