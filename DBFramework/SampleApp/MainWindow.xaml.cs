@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,12 +16,23 @@ namespace SampleApp
     {
         private Connector connector = null;
         private Dictionary<string, dynamic> listTable = null;
+        private string currentTableName;
+        private dynamic currentTable;
+        private ObservableCollection<dynamic> data;
+        private List<DataGridRow> newRows;
+        private List<DataGridRow> updateRows;
+        private List<dynamic> deleteItems;
 
         public MainWindow()
         {
             InitializeComponent();
 
             listTable = new Dictionary<string, dynamic>();
+            currentTable = null;
+            currentTableName = "";
+            newRows = new List<DataGridRow>();
+            updateRows = new List<DataGridRow>();
+            deleteItems = new List<dynamic>();
         }
 
         private void LoadListTable()
@@ -33,22 +45,13 @@ namespace SampleApp
         private void ShowData(string tableName)
         {
             Type tableType = Entity.instance.getTypeByName(tableName);
+            
+            currentTable = listTable[tableName];
+            data = new ObservableCollection<dynamic>(currentTable.getAll());
 
-            foreach (PropertyInfo property in tableType.GetProperties())
-            {
-                var column = new DataGridTextColumn();
-                column.Header = property.Name;
-                column.Binding = new Binding(property.Name);
-                MainDataGrid.Columns.Add(column);
-            }
+            CollectionViewSource categoryViewSource = ((CollectionViewSource)(this.FindResource("TableData")));
 
-            dynamic context = listTable[tableName];
-            var data = context.getAll();
-
-            foreach (object item in data)
-            {
-                MainDataGrid.Items.Add(item);
-            }
+            categoryViewSource.Source = data;
         }
 
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
@@ -69,11 +72,80 @@ namespace SampleApp
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             LoadListTable();
+            if (currentTableName != "")
+            {
+                ShowData(currentTableName);
+            }
         }
 
         private void TableCombobox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            ShowData(((ComboBox)sender).SelectedValue.ToString());
+            currentTableName = ((ComboBox)sender).SelectedValue.ToString();
+            ShowData(currentTableName);
+        }
+
+        private void MainDataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            if (e.EditAction == DataGridEditAction.Commit)
+            {
+                if (e.Row.IsNewItem)
+                {
+                    newRows.Add(e.Row);
+                }
+                else
+                {
+                    updateRows.Add(e.Row);
+                }
+            }
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (DataGridRow row in newRows)
+            {
+                dynamic item = row.Item;
+                currentTable.add(item);
+            }
+            foreach (DataGridRow row in updateRows)
+            {
+                dynamic item = row.Item;
+                currentTable.update(item);
+            }
+            foreach (dynamic item in deleteItems)
+            {
+                currentTable.delete(item.id);
+            }
+            newRows = new List<DataGridRow>();
+            updateRows = new List<DataGridRow>();
+            deleteItems = new List<dynamic>();
+
+            ShowData(currentTableName);
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var deletingItem = MainDataGrid.CurrentCell.Item;
+            data.Remove(deletingItem);
+            foreach (DataGridRow row in newRows)
+            {
+                dynamic item = row.Item;
+                if (deletingItem.Equals(item))
+                {
+                    newRows.Remove(row);
+                    return;
+                }
+            }
+            foreach (DataGridRow row in updateRows)
+            {
+                dynamic item = row.Item;
+                if (deletingItem.Equals(item))
+                {
+                    updateRows.Remove(item);
+                    return;
+                }
+            }
+
+            deleteItems.Add(deletingItem);
         }
     }
 }

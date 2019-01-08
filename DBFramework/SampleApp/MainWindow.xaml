@@ -6,12 +6,16 @@
         xmlns:local="clr-namespace:SampleApp"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="699">
+    <Window.Resources>
+        <CollectionViewSource x:Key="TableData" Source="{Binding Path=AllItems}">
+        </CollectionViewSource>
+    </Window.Resources>
     <Grid>
         <Grid HorizontalAlignment="Left" Width="220">
             <Label Content="Server name:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="ServerTextbox" HorizontalAlignment="Left" Height="23" Margin="93,14,0,0" VerticalAlignment="Top" Width="120" Text="DESKTOP-735FCOO\SQLEXPRESS"/>
+            <TextBox x:Name="ServerTextbox" HorizontalAlignment="Left" Height="23" Margin="93,14,0,0" VerticalAlignment="Top" Width="120"/>
             <Label Content="Database" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="DatabaseTextbox" HorizontalAlignment="Left" Height="23" Margin="93,45,0,0" VerticalAlignment="Top" Width="120" Text="Library"/>
+            <TextBox x:Name="DatabaseTextbox" HorizontalAlignment="Left" Height="23" Margin="93,45,0,0" VerticalAlignment="Top" Width="120"/>
             <Label Content="Username:" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
             <TextBox x:Name="UsernameTextbox" IsEnabled="{Binding IsChecked, ElementName=NormalAuthenCheckbox}" HorizontalAlignment="Left" Height="24" Margin="93,74,0,0" VerticalAlignment="Top" Width="120"/>
             <Label Content="Password:" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top"/>
@@ -23,8 +27,20 @@
             <Label Content="Table:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
             <ComboBox x:Name="TableCombobox" HorizontalAlignment="Left" Margin="55,14,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="TableCombobox_SelectionChanged"/>
             <Button x:Name="RefreshButton" Content="Refresh" HorizontalAlignment="Left" Margin="180,14,0,0" VerticalAlignment="Top" Width="75" Height="22" Click="RefreshButton_Click"/>
-            <DataGrid x:Name="MainDataGrid" Margin="10,41,10,10"/>
+            <DataGrid x:Name="MainDataGrid" Margin="10,41,10,35" DataContext="{StaticResource TableData}" ItemsSource="{Binding}" CanUserAddRows="True" CanUserDeleteRows="True" AutoGenerateColumns="True" SelectionUnit="FullRow" RowEditEnding="MainDataGrid_RowEditEnding">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="32">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Name="DeleteButton" Width="14" Height="14" Click="DeleteButton_Click" Command="Delete">
+                                    <Image Source="./Assets/delete.png"/>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Button x:Name="SaveButton" Content="Save changes" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="87" Click="SaveButton_Click"/>
         </Grid>
-
     </Grid>
 </Window>
