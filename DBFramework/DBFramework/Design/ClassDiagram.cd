@@ -33,14 +33,14 @@
     <Position X="0.5" Y="4" Width="1.5" />
     <AssociationLine Name="connector" Type="DBFramework.Connector" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="2" Y="4.648" />
-        <Point X="5.406" Y="4.648" />
+        <Point X="2" Y="4.686" />
+        <Point X="5.406" Y="4.686" />
         <Point X="5.406" Y="3.1" />
         <Point X="6.75" Y="3.1" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAAABAACQAAACABAAAABEAgAAAAAAAA=</HashCode>
+      <HashCode>AAAEAAAAAAAAAAAABAACQAAACABAAAABEAgAAEAAAAA=</HashCode>
       <FileName>Entity.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -81,7 +81,7 @@
   <Class Name="DBFramework.DBContext">
     <Position X="2.75" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAQAAAAAAABAACAAAACABAAAABAAAAAgAAAAA=</HashCode>
+      <HashCode>AAAEAAAAQAAAAAAABAACAAAACABAAAABACAAAgAAAAA=</HashCode>
       <FileName>DBContext.cs</FileName>
     </TypeIdentifier>
   </Class>
