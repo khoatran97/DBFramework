@@ -56,25 +56,49 @@ namespace DBFramework
             return true;
         }
 
-        public bool update(T entity, string prop, string newValue, int id)
+        public bool update(T entity)
         {
             Type t = typeof(T);
             List<object> values = new List<object>();
             string query = "UPDATE";
-            string param = "";
+            string updateQuery = "";
+            string whereQuery = "";
+            object idValue;
 
             // CREATE QUERY
-            query = query + " " + t.FullName + " SET " + prop + " = " + newValue + " WHERE id = @id";
+            query = query + " " + t.FullName + " SET ";
+            PropertyInfo[] properties = t.GetProperties();
+            for (int i = 1; i < properties.Length; i++)
+            {
+                updateQuery += updateQuery == "" ? properties[i].Name + " = " : ", " + properties[i].Name + " = ";
+                PropertyInfo prop1 = t.GetProperty(properties[i].Name);
+                values.Add(prop1.GetValue(entity));
+                updateQuery += "@name" + i;
+            }
+
+            whereQuery = " WHERE " + properties[0].Name + " = " + "@id";
+            PropertyInfo propId = t.GetProperty(properties[0].Name);
+            idValue = propId.GetValue(entity);
+
+            query += updateQuery + whereQuery + ";";
 
             //EXECUTE QUERY
             SqlCommand command = new SqlCommand(query, connector.connection);
 
             //ADD PARAMS
-            command.Parameters.AddWithValue("@id", id);
+            int j = 1;
+            foreach (object value in values)
+            {
+                command.Parameters.AddWithValue("@name" + (j++), value);
+            }
+
+            command.Parameters.AddWithValue("@id", idValue);
 
             connector.connection.Open();
 
-            command.ExecuteNonQuery();
+            int result = command.ExecuteNonQuery();
+
+            connector.connection.Close();
 
             return true;
         }        
