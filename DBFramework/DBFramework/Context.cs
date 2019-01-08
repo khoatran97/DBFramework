@@ -111,7 +111,7 @@ namespace DBFramework
                 string query = "DELETE i";
 
                 // CREATE QUERY
-                query = query + " " + "FROM " + typeof(T).FullName.Split('.')[1] + " i WHERE i.id = @id";
+                query = query + " " + "FROM " + typeof(T).FullName + " i WHERE i.id = @id";
 
                 //EXECUTE QUERY
                 SqlCommand command = new SqlCommand(query, connector.connection);
@@ -119,9 +119,15 @@ namespace DBFramework
                 //ADD PARAMS
                 command.Parameters.AddWithValue("@id", id);
 
+                if (connector.connection.State == ConnectionState.Open)
+                {
+                    connector.connection.Close();
+                }
                 connector.connection.Open();
 
                 command.ExecuteNonQuery();
+
+                connector.connection.Close();
 
                 return true;
             }
@@ -169,7 +175,7 @@ namespace DBFramework
             string query = "SELECT *";            
 
             // CREATE QUERY
-            query = query + " " + "FROM " + typeof(T).FullName.Split('.')[1] + " i WHERE i.id = @id";
+            query = query + " " + "FROM " + typeof(T).FullName + " i WHERE i.id = @id";
 
             //EXECUTE QUERY
             SqlCommand command = new SqlCommand(query, connector.connection);
