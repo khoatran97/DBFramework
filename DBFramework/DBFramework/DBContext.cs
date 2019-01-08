@@ -29,7 +29,7 @@ namespace DBFramework
 
             foreach (string type in listType.Keys)
             {
-                Type generic = typeof(Context<>);
+                Type generic = typeof(Context<>); 
 
                 Type contructedClass = generic.MakeGenericType(listType[type]);
 
